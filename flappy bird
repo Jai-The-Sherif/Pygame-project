@@ -1,0 +1,73 @@
+import pygame
+import os
+import random
+import sys
+
+class game():
+	pass
+
+#attributes
+run = True
+SCR_W = 700  #screen width
+SCR_H = 500  #screen height
+flght_spd = 10
+
+
+# inits
+
+#main
+pygame.init()
+screen = pygame.display.set_mode((SCR_W,SCR_H))
+
+#player's sprite
+flght = pygame.image.load('flight.png')
+flght = pygame.transform.scale(flght,(30,32))
+flght = pygame.transform.rotate(flght,-90)
+flght_area = flght.get_rect(center = (50,50)) 
+
+#score display
+fnt = pygame.font.SysFont( 'Abdadlad.ttf', 18)
+txt = fnt.render("00:00", True, (255,255,255), (0,0,0))
+txt_area = txt.get_rect(center = ( SCR_W-100, 20))
+
+#droids <asteriods>
+droid = pygame.image.load('droid2.png')
+droid = pygame.transform.scale(droid,(20,20))
+droid_area = droid.get_rect()
+droid_pos = SCR_W+50
+
+
+
+#timer
+CLOCK = pygame.time.Clock()
+
+while run: #game loop
+	score = pygame.time.get_ticks()//1000
+	txt = fnt.render( "SCORE : "+str(score), True, (255,255,255), (0,0,0))
+
+	print(score)
+
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			run = False
+	
+	screen.blit(txt,txt_area)
+
+	keys = pygame.key.get_pressed() # ~set ( K_UP, K_DOWN, K_RIGHT, K_LEFT) 
+											 #True, False, ...
+
+	if keys[pygame.K_UP] :
+		flght_area.centery = flght_area.centery - flght_spd
+	if keys[pygame.K_DOWN] :
+		flght_area.centery = flght_area.centery + flght_spd
+
+
+	screen.blit(flght,flght_area)
+	screen.blit(droid,droid_area,(droid_pos , 60))
+	droid_pos += 10
+
+	pygame.display.update()
+	CLOCK.tick(20) #fps
+	screen.fill((0,0,0))
+
+
